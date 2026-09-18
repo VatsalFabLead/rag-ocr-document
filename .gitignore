@@ -1,0 +1,25 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Custom OCR dynamic runtime files
+custom_ocr/uploads/*
+!custom_ocr/uploads/.gitkeep
+custom_ocr/outputs/*
+!custom_ocr/outputs/.gitkeep
+custom_ocr/7zr.exe
+
+# Environment variables & system files
+.env
+*.log
+.DS_Store
+Thumbs.db

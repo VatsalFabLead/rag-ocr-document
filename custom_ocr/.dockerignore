@@ -1,0 +1,15 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+.coverage
+.venv
+venv
+uploads/*
+!uploads/.gitkeep
+outputs/*
+!outputs/.gitkeep
+7zr.exe
+.git
+.gitignore

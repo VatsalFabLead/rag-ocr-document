@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisionOCR Intelligence | Advanced Document Processing & AI Extraction</title>
+    <meta name="description" content="Production-grade Custom OCR and Document Understanding Pipeline with image preprocessing, text detection, recognition, table extraction, and structured JSON output.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="glow-bg"></div>
+
+    <!-- Top Navigation Bar -->
+    <header class="app-header">
+        <div class="logo-group">
+            <div class="logo-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="3" ry="3"></rect>
+                    <line x1="7" y1="8" x2="17" y2="8"></line>
+                    <line x1="7" y1="12" x2="14" y2="12"></line>
+                    <line x1="7" y1="16" x2="11" y2="16"></line>
+                </svg>
+            </div>
+            <div>
+                <h1 class="logo-title">VisionOCR <span class="badge-tag">AI Pipeline</span></h1>
+                <p class="logo-subtitle">Custom Text Detection, Preprocessing & Intelligent Field Extraction</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <div class="system-status-chip">
+                <span class="pulse-dot"></span>
+                <span id="engine-status">Engine: Ready</span>
+            </div>
+            <button id="open-keys-modal-btn" class="nav-btn outline-btn" style="border-color: #6366f1; color: #a5b4fc; cursor: pointer;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 2l-2 2m-2-2l2 2m-2 2l2-2m-7 7l4 4-2 2-4-4m0 0l-7 7a2 2 0 0 1-2.83-2.83l7-7m2.83-2.83l4 4"></path>
+                </svg>
+                Custom Model Keys
+            </button>
+            <a href="/docs" target="_blank" class="nav-btn outline-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                API Docs
+            </a>
+        </div>
+    </header>
+
+    <!-- Pipeline Stepper Flow -->
+    <div class="pipeline-stepper-container">
+        <div class="step-card active" id="step-nav-1">
+            <div class="step-num">1</div>
+            <div class="step-label">Upload & Validate</div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card" id="step-nav-2">
+            <div class="step-num">2</div>
+            <div class="step-label">CV Preprocessing</div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card" id="step-nav-3">
+            <div class="step-num">3</div>
+            <div class="step-label">Custom OCR Engine</div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card" id="step-nav-4">
+            <div class="step-num">4</div>
+            <div class="step-label">Post-Processing</div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card" id="step-nav-5">
+            <div class="step-num">5</div>
+            <div class="step-label">Document Intelligence</div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card" id="step-nav-6">
+            <div class="step-num">6</div>
+            <div class="step-label">Structured Output</div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card" id="step-nav-7">
+            <div class="step-num">7</div>
+            <div class="step-label">Custom Model RAG</div>
+        </div>
+    </div>
+
+    <!-- Main Workspace Container -->
+    <main class="main-layout">
+        <!-- Left Panel: Ingestion & Preprocessing Viewer -->
+        <section class="panel left-panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    Document Ingestion
+                </div>
+                <button id="load-sample-btn" class="text-btn">Load Demo Invoice</button>
+            </div>
+
+            <!-- Upload Dropzone -->
+            <div class="upload-dropzone" id="drop-zone">
+                <input type="file" id="file-input" accept=".pdf,.png,.jpg,.jpeg,.tiff,.bmp,.webp" hidden>
+                <div class="dropzone-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="12" y1="18" x2="12" y2="12"></line>
+                        <line x1="9" y1="15" x2="12" y2="12"></line>
+                        <line x1="15" y1="15" x2="12" y2="12"></line>
+                    </svg>
+                </div>
+                <div class="dropzone-text">
+                    <p class="dropzone-title">Drop PDF, Scan, or Image here</p>
+                    <p class="dropzone-desc">Supports PDF, PNG, JPG, TIFF, WEBP (Up to 25 MB)</p>
+                </div>
+                <button class="btn primary-btn" id="browse-btn" type="button">Select Document</button>
+            </div>
+
+            <!-- Preprocessing Options Accordion -->
+            <div class="config-card">
+                <div class="config-header" id="config-toggle">
+                    <span>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                        Preprocessing & Engine Pipeline Tuning
+                    </span>
+                    <span class="chevron">▼</span>
+                </div>
+                <div class="config-body" id="config-body">
+                    <div class="toggle-grid">
+                        <label class="switch-item">
+                            <input type="checkbox" id="opt-deskew" checked>
+                            <span class="switch-slider"></span>
+                            <span class="switch-label">Deskew Rotation (0°)</span>
+                        </label>
+                        <label class="switch-item">
+                            <input type="checkbox" id="opt-clahe" checked>
+                            <span class="switch-slider"></span>
+                            <span class="switch-label">CLAHE Contrast Normalizer</span>
+                        </label>
+                        <label class="switch-item">
+                            <input type="checkbox" id="opt-denoise" checked>
+                            <span class="switch-slider"></span>
+                            <span class="switch-label">Bilateral Noise Filter</span>
+                        </label>
+                        <label class="switch-item">
+                            <input type="checkbox" id="opt-thresh" checked>
+                            <span class="switch-slider"></span>
+                            <span class="switch-label">Adaptive Binarization</span>
+                        </label>
+                    </div>
+                    <div class="input-row">
+                        <label>OCR Engine:</label>
+                        <select id="engine-select" class="select-input">
+                            <option value="auto">Auto Select (Best Available)</option>
+                            <option value="tesseract">Tesseract Engine</option>
+                            <option value="easyocr">EasyOCR Deep Learning</option>
+                            <option value="custom_cv">Custom CV Gradient Engine</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Button -->
+            <button id="process-pipeline-btn" class="btn run-pipeline-btn" disabled>
+                <span class="btn-sparkle">✨</span>
+                Run Full OCR & Extraction Pipeline
+            </button>
+
+            <!-- Preprocessing Stage Inspector -->
+            <div class="preprocessing-inspector" id="prep-inspector" style="display: none;">
+                <div class="inspector-header">
+                    <h4>Step 2: Preprocessing Stages</h4>
+                    <span class="skew-badge" id="skew-display">Skew: 0.0°</span>
+                </div>
+                <div class="stage-tabs" id="stage-tabs-list">
+                    <!-- Dynamic tabs injected by JS -->
+                </div>
+                <div class="stage-preview-box">
+                    <img id="stage-preview-img" src="" alt="Preprocessing stage">
+                    <p class="stage-desc" id="stage-desc-text"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Panel: Interactive Visualizer & Structured Intelligence -->
+        <section class="panel right-panel">
+            <div class="panel-tab-bar">
+                <button class="tab-btn active" data-tab="tab-visualizer" id="tab-btn-vis">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    Interactive Document Canvas
+                </button>
+                <button class="tab-btn" data-tab="tab-fields" id="tab-btn-fields">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                    Extracted Fields (<span id="fields-badge">0</span>)
+                </button>
+                <button class="tab-btn" data-tab="tab-tables" id="tab-btn-tables">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18M15 3v18"></path>
+                    </svg>
+                    Tables (<span id="tables-badge">0</span>)
+                </button>
+                <button class="tab-btn" data-tab="tab-json" id="tab-btn-json">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="16 18 22 12 16 6"></polyline>
+                        <polyline points="8 6 2 12 8 18"></polyline>
+                    </svg>
+                    Structured JSON
+                </button>
+                <button class="tab-btn" data-tab="tab-rag" id="tab-btn-rag" style="border-color: rgba(99, 102, 241, 0.4);">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    Custom Model Q&A (RAG)
+                </button>
+            </div>
+
+            <!-- Tab 1: Interactive Canvas Visualizer -->
+            <div class="tab-content active" id="tab-visualizer">
+                <div class="canvas-controls">
+                    <div class="stat-pill" id="stats-confidence">Confidence: --%</div>
+                    <div class="stat-pill" id="stats-words">Words: 0</div>
+                    <div class="stat-pill" id="stats-time">Time: -- ms</div>
+                    <div class="canvas-zoom-tools">
+                        <button class="icon-tool-btn" id="zoom-in">+</button>
+                        <button class="icon-tool-btn" id="zoom-out">−</button>
+                        <button class="icon-tool-btn" id="zoom-reset">Reset</button>
+                    </div>
+                </div>
+
+                <div class="canvas-viewport" id="canvas-viewport">
+                    <div class="canvas-wrapper" id="canvas-wrapper">
+                        <img id="doc-canvas-image" src="" alt="Document Preview">
+                        <div class="overlay-layer" id="overlay-layer"></div>
+                    </div>
+                    <div class="empty-state" id="canvas-empty">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                            <line x1="9" y1="9" x2="15" y2="9"></line>
+                            <line x1="9" y1="13" x2="15" y2="13"></line>
+                            <line x1="9" y1="17" x2="12" y2="17"></line>
+                        </svg>
+                        <p>Upload a document to view OCR bounding boxes & visual detections.</p>
+                    </div>
+                </div>
+
+                <!-- Hovered Bounding Box Tooltip Card -->
+                <div class="bbox-tooltip" id="bbox-tooltip" style="display: none;">
+                    <div class="tooltip-text" id="tooltip-text"></div>
+                    <div class="tooltip-meta">
+                        <span id="tooltip-conf"></span>
+                        <span id="tooltip-coords"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Extracted Fields -->
+            <div class="tab-content" id="tab-fields">
+                <div class="doc-summary-banner" id="doc-summary-banner">
+                    <span class="badge doc-badge" id="doc-type-badge">GENERIC</span>
+                    <span id="doc-summary-text">Run pipeline to extract structured invoice/receipt/ID entities.</span>
+                </div>
+
+                <div class="fields-section">
+                    <h4 class="section-title">Core Document Entities</h4>
+                    <div class="fields-grid" id="primary-fields-grid">
+                        <div class="empty-text">No fields extracted yet.</div>
+                    </div>
+                </div>
+
+                <div class="fields-section">
+                    <h4 class="section-title">Spatial Key-Value Pairs</h4>
+                    <div class="kv-grid" id="kv-pairs-grid">
+                        <div class="empty-text">No key-value pairs detected.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Tables Viewer -->
+            <div class="tab-content" id="tab-tables">
+                <div id="tables-container">
+                    <div class="empty-state">
+                        <p>No tabular structures detected on this document.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 4: Structured JSON -->
+            <div class="tab-content" id="tab-json">
+                <div class="json-actions-bar">
+                    <button class="btn outline-btn" id="copy-json-btn">Copy JSON</button>
+                    <button class="btn outline-btn" id="export-json-btn">Download .JSON</button>
+                    <button class="btn outline-btn" id="export-csv-btn">Download .CSV</button>
+                </div>
+                <pre class="json-viewer"><code id="json-code-block">{ "status": "idle", "message": "Upload document to view JSON" }</code></pre>
+            </div>
+
+            <!-- Tab 5: Custom Model RAG Q&A & Conversational Chat -->
+            <div class="tab-content" id="tab-rag">
+                <div class="rag-chat-container">
+                    <div class="rag-header-bar">
+                        <div class="rag-model-badge">
+                            <span class="pulse-dot" style="background: #10b981;"></span>
+                            <strong>Custom Model:</strong> <code>custom-rag-doc-v1</code>
+                            <span class="free-pill">100% Permanently Free</span>
+                        </div>
+                        <div class="rag-doc-indicator" id="rag-active-doc">Document: None Indexed</div>
+                    </div>
+
+                    <!-- Quick Suggestions -->
+                    <div class="rag-suggestions" id="rag-suggestions">
+                        <span class="sugg-label">Quick Prompts:</span>
+                        <button class="sugg-chip" data-q="What is the total amount and tax?">Total & Tax</button>
+                        <button class="sugg-chip" data-q="What is the invoice number and due date?">Invoice & Due Date</button>
+                        <button class="sugg-chip" data-q="Who is the vendor or issuing company?">Vendor Info</button>
+                        <button class="sugg-chip" data-q="Summarize this document and its key points.">Full Summary</button>
+                    </div>
+
+                    <!-- Chat Messages Flow -->
+                    <div class="rag-messages" id="rag-messages">
+                        <div class="rag-msg assistant">
+                            <div class="msg-avatar">AI</div>
+                            <div class="msg-bubble">
+                                <p><strong>Welcome to your Custom Model Document Intelligence!</strong></p>
+                                <p>Upload and process any document through OCR. You can then ask questions in natural language, extract exact figures, or chat with citations grounded by page numbers.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Input Bar -->
+                    <form class="rag-input-bar" id="rag-input-form">
+                        <input type="text" id="rag-query-input" placeholder="Ask a question about this document (e.g., 'What is the total amount?')..." autocomplete="off">
+                        <button type="submit" class="btn primary-btn" id="rag-send-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                            Ask Model
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Custom Model API Key Manager Modal -->
+    <div class="modal-backdrop" id="keys-modal" style="display: none;">
+        <div class="keys-modal-card">
+            <div class="modal-header">
+                <div>
+                    <h3 class="modal-title">Custom Model API Key Manager</h3>
+                    <p class="modal-subtitle">100% Free & Self-Hosted • Drop keys into Flutter, Python, Web, or cURL</p>
+                </div>
+                <button class="modal-close-btn" id="close-keys-modal">&times;</button>
+            </div>
+
+            <!-- Active Key Showcase -->
+            <div class="active-key-banner">
+                <div class="key-info-label">Active Custom Model Key:</div>
+                <div class="key-display-row">
+                    <code id="active-key-display">sk-custom-ocr-master-v1.1</code>
+                    <button class="btn outline-btn copy-btn" id="copy-active-key-btn">Copy Key</button>
+                </div>
+                <p class="key-hint">Authenticate requests with header: <code>Authorization: Bearer &lt;YOUR_KEY&gt;</code></p>
+            </div>
+
+            <!-- Create New Key Form -->
+            <form class="create-key-form" id="create-key-form">
+                <div class="form-group">
+                    <label for="new-key-name">Project / Client Name</label>
+                    <div class="input-with-button">
+                        <input type="text" id="new-key-name" placeholder="e.g. Flutter Mobile App, Web Client, Python Microservice" required>
+                        <button type="submit" class="btn primary-btn" id="generate-key-btn">Generate Key</button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Existing Keys Table -->
+            <div class="keys-list-container">
+                <h4 class="keys-section-title">Active Project Keys</h4>
+                <div class="keys-table-wrapper">
+                    <table class="keys-table">
+                        <thead>
+                            <tr>
+                                <th>Project Name</th>
+                                <th>API Key (Masked)</th>
+                                <th>Requests</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="keys-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Quick Integration Snippets -->
+            <div class="snippets-container">
+                <h4 class="keys-section-title">Quick Integration Snippets</h4>
+                <div class="snippet-tabs">
+                    <button class="snippet-tab-btn active" data-lang="flutter">Flutter OCR</button>
+                    <button class="snippet-tab-btn" data-lang="python">Python OCR</button>
+                    <button class="snippet-tab-btn" data-lang="curl">cURL OCR</button>
+                    <button class="snippet-tab-btn" data-lang="base64">Base64 JSON</button>
+                </div>
+                <pre class="snippet-pre"><code id="snippet-code-box"></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Processing Loader Overlay -->
+    <div class="loading-overlay" id="loading-overlay" style="display: none;">
+        <div class="spinner-card">
+            <div class="dual-ring-spinner"></div>
+            <h3 id="loader-status">Processing Document...</h3>
+            <p id="loader-subtext">Executing 7-stage CV preprocessing & OCR inference</p>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

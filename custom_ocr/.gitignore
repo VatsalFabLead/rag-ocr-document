@@ -1,0 +1,30 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Uploads & Outputs (keep directory structure with .gitkeep)
+uploads/*
+!uploads/.gitkeep
+outputs/*
+!outputs/.gitkeep
+
+# Environment variables
+.env
+.env.local
+
+# Temporary / Binary tools
+7zr.exe
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
